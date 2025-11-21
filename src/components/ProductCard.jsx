@@ -2,6 +2,8 @@ import Button from './Button'
 import { Link } from 'react-router-dom'
 import { Rate } from 'antd'
 import slugify from 'slugify'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../utils/cartSlice'
 
 const stockObject = {
   'In Stock': 'bg-green-400',
@@ -10,6 +12,20 @@ const stockObject = {
 }
 
 const ProductCard = ({ product }) => {
+  const dispatch = useDispatch()
+
+  const handleAdd = () => {
+    dispatch(
+      addToCart({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        quantity: 1,
+        thumbnail: product.thumbnail,
+      })
+    )
+  }
+
   return (
     <div>
       <div className="relative w-full mb-4 bg-gray-200">
@@ -49,17 +65,21 @@ const ProductCard = ({ product }) => {
           ? product.description.substring(0, 50) + '...'
           : product.description}
       </p>
+
       <div className="mt-5 mb-3">
-        <span>
-          <Rate
-            disabled
-            allowHalf
-            value={product.rating}
-            style={{ fontSize: 16, color: '#32CD32' }}
-          />
-        </span>
+        <Rate
+          disabled
+          allowHalf
+          value={product.rating}
+          style={{ fontSize: 16, color: '#32CD32' }}
+        />
       </div>
-      <Button disabled={!product.stock} className="block w-fit ms-auto">
+
+      <Button
+        disabled={!product.stock}
+        className="block w-fit ms-auto"
+        onClick={handleAdd}
+      >
         {product.stock ? 'Add To Cart' : 'Out of Stock'}
       </Button>
     </div>
