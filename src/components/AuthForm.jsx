@@ -37,25 +37,49 @@ const AuthForm = ({ action }) => {
     e.preventDefault()
     let errors = {}
 
+    const emailRe = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$'
+
     if (action === 'register') {
       if (!formData.firstName) errors.firstName = 'First name is required.'
       if (!formData.lastName) errors.lastName = 'Last name is required.'
-      if (!formData.email) errors.email = 'Email is required.'
-      if (!formData.password) errors.password = 'Password is required.'
+
+      if (!formData.email) {
+        errors.email = 'Email is required.'
+      } else if (!emailRe.test(formData.email)) {
+        errors.email = 'Email is not valid.'
+      }
+
+      if (!formData.password) {
+        errors.password = 'Password is required.'
+      } else if (formData.password.length < 8) {
+        errors.password = 'Password must be at least 8 characters.'
+      }
+
       if (formData.password !== formData.confirmPassword) {
         errors.confirmPassword = 'Passwords do not match.'
       }
+
       if (!formData.acceptTerm) {
         errors.acceptTerm = 'You must accept the terms.'
       }
     } else {
-      if (!formData.email) errors.email = 'Email is required.'
-      if (!formData.password) errors.password = 'Password is required.'
+      if (!formData.email) {
+        errors.email = 'Email is required.'
+      } else if (!emailRe.test(formData.email)) {
+        errors.email = 'Email is not valid.'
+      }
+
+      if (!formData.password) {
+        errors.password = 'Password is required.'
+      } else if (formData.password.length < 8) {
+        errors.password = 'Password must be at least 8 characters.'
+      }
     }
 
     setFormError(errors)
 
     if (Object.keys(errors).length === 0) {
+      console.log(formData)
       if (action === 'register') {
         Navigate('/login', { replace: true })
       } else {

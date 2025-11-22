@@ -39,6 +39,7 @@ const Navbar = () => {
               >
                 Login
               </Link>
+              <Link to={'/contact'}>Contact Us</Link>
             </nav>
 
             <select
