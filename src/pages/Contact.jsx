@@ -35,10 +35,12 @@ const Contact = () => {
       errors.email = 'Email is not valid.'
     }
 
-    if (formData.message.length < 10) {
+    if (!formData.message) {
+      errors.message = 'Message is required.'
+    } else if (formData.message.length < 10) {
       errors.message = 'Message must be at least 10 characters'
     } else if (formData.message.length > maxChars) {
-      errors.message = 'Message is required.'
+      errors.message = 'Message can not exceed 500 characters'
     }
 
     setErrors(errors)
