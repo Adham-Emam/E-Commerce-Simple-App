@@ -24,7 +24,7 @@ const Contact = () => {
 
     let errors = {}
 
-    const emailRe = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$'
+    const emailRe = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/
 
     if (!formData.firstName) errors.firstName = 'First name is required.'
     if (!formData.lastName) errors.lastName = 'Last name is required.'
@@ -35,11 +35,9 @@ const Contact = () => {
       errors.email = 'Email is not valid.'
     }
 
-    if (
-      !formData.message ||
-      formData.message.length < 10 ||
-      formData.message.length > maxChars
-    ) {
+    if (formData.message.length < 10) {
+      errors.message = 'Message must be at least 10 characters'
+    } else if (formData.message.length > maxChars) {
       errors.message = 'Message is required.'
     }
 
@@ -49,6 +47,7 @@ const Contact = () => {
       console.log(formData)
     }
   }
+
   const handleChange = (e) => {
     const { name, value } = e.target
     if (name === 'message' && value.length > maxChars) {
@@ -86,18 +85,19 @@ const Contact = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="mb-4 flex justify-between md:flex-row md:space-x-4">
-          {errors.firstName && (
-            <p className="text-red-500 text-xs mt-1 flex-1">
-              {errors.firstName}
-            </p>
-          )}
-          {errors.lastName && (
-            <p className="text-red-500 text-xs mt-1 flex-1">
-              {errors.lastName}
-            </p>
-          )}
+        <div className="mb-4 grid grid-cols-2 gap-4">
+          <div>
+            {errors.firstName && (
+              <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
+            )}
+          </div>
+          <div>
+            {errors.lastName && (
+              <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
+            )}
+          </div>
         </div>
+
         <div className="mb-4 flex md:flex-row md:space-x-4">
           <input
             type="email"
@@ -135,6 +135,7 @@ const Contact = () => {
           <span className="block text-right text-gray-600 text-sm">
             Remaining characters: {maxChars - formData.message.length}
           </span>
+          <p className="text-red-500 text-xs mt-1">{errors.message}</p>
         </div>
         <Button type="submit">Send Message</Button>
       </form>

@@ -37,7 +37,7 @@ const AuthForm = ({ action }) => {
     e.preventDefault()
     let errors = {}
 
-    const emailRe = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$'
+    const emailRe = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/
 
     if (action === 'register') {
       if (!formData.firstName) errors.firstName = 'First name is required.'
